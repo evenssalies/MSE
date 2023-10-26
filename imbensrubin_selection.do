@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /*	Select variables of the propensity score by using the 3-stage I&R's 2015 */
 /*	stepwise procedure. Use a logit prediction model		                 */
+/*		Todo list: make the command program!								 */
 /*****************************************************************************/
 
 cls
