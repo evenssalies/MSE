@@ -89,7 +89,7 @@ while				`I'<=9 {
    }
   }
  }
- global				VQI $VQI `CHI2VAR'						/* Transfer the covariate */
+ global				VQI $VQI `CHI2VAR'				/* Transfer the covariate */
  global				TEMP : list global(TEMP) - CHI2VAR		/*  from TEMP to VQI */
  local				++I
 }
