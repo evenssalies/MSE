@@ -11,7 +11,7 @@
 /*		sélectionnée tout le temps, car toutes les autres qui restent ne 	*/
 /*		passent pas le test 							*/
 /*											*/
-/*	Application:	Tran, T., Salies, E. (2003). How important is open-source	*/
+/*	Application:	Tran, T., Salies, E. (2023). How important is open-source	*/
 /*			science for invention speed?					*/
 /*			https://sciencespo.hal.science/hal-04239561/			*/
 /****************************************************************************************/
