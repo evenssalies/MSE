@@ -1,8 +1,11 @@
 /****************************************************************************************/
+/*	In progress.									*/
 /*	Select variables of the propensity score by using the 3-stage I&R's 2015	*/
 /*	stepwise procedure. Use a logit prediction model		         	*/
 /*		Todo list: make the command program for any number of variables.	*/
 /* 		+ Note about stage 2: needs to be optimized			 	*/
+/*		+ link to the right template file					*/
+/*											*/
 /*	FR:	Je n'ai pas besoin de parcourir les 6 variables de TEMP. Une	 	*/
 /*		fois VL augmentée de la variable ayant le plus grand LR, puis		*/
 /*		augmentée de la variable ayant le deuxième plus grand LR, ...,		*/
