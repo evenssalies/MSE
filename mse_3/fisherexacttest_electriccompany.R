@@ -1,10 +1,11 @@
-library(vscDebugger)
-
 # Fisher's test in a Completely Randomized Experiment
 # Rubin (2005, II-7.3); Children's Television Workshop "Electric Company"
 
-### Données originelles
+# Si exécution depuis VSCode
+# install.packages("vscDebugger", repos = "https://manuelhentschel.r-universe.dev")
+# library(vscDebugger)
 
+### Données originelles
 elec <- read.csv2("http://www.evens-salies.com/electric.company.csv")
 View(elec)
 str(elec)
