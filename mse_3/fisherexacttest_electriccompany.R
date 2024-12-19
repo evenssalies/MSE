@@ -1,5 +1,6 @@
 # Fisher's test in a Completely Randomized Experiment
-# Rubin (2005, II-7.3); Children's Television Workshop "Electric Company"
+# Evens Salies, v1: 11/2017, v2: 12/2024
+# Source and theory: Rubin (2005, II-7.3); Children's Television Workshop "Electric Company"
 
 # Si exécution depuis VSCode
 # install.packages("vscDebugger", repos = "https://manuelhentschel.r-universe.dev")
