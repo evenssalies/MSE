@@ -1,6 +1,8 @@
-# Méthodes statistiques d'évaluation
+## Statistical Evaluation Methods
 
-## *This repository is under construction, transferring my programs here will take some time ...*
+The course "Méthodes statistiques d'évaluation" is in French. Comments in example programs will be in English.
+
+### *This repository is still under construction, transferring my programs here will take some time ...*
 
 - Include comments where missing
 - Translate existing comments in French into English
