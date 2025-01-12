@@ -8,4 +8,4 @@ The course "Méthodes statistiques d'évaluation" is in French. Comments in exam
 - Translate existing comments in French into English
 - ...
 
-Link to the lecture notes : [MSE](http://evens-salies.com/2024_MSE.pdf)
+Link to the latest version of the lecture notes : [MSE](http://evens-salies.com/2024_MSE.pdf)
