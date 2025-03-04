@@ -45,7 +45,7 @@ destring		Y0 Y1, replace
 generate		DIFF=Y1-Y0
 summarize		DIFF
 local			MEAN=r(mean)
-di 				`MEAN'
+di				`MEAN'
 
 * Estimateur de la variance à la Neyman (pairwise)
 generate		DIFFCQ=(DIFF-`MEAN')^2
