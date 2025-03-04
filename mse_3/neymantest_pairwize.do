@@ -45,12 +45,12 @@ destring		Y0 Y1, replace
 generate		DIFF=Y1-Y0
 summarize		DIFF
 local			MEAN=r(mean)
-di				`MEAN'
+di			`MEAN'
 
 * Estimateur de la variance à la Neyman (pairwise)
 generate		DIFFCQ=(DIFF-`MEAN')^2
 total			DIFFCQ
-matrix define	MAT=e(b)
+matrix define		MAT=e(b)
 local			TOTAL=MAT[1,1]
 local			DDL=(e(N)/1)*(e(N)/1-1) // Attention e(N) est déjà N/2
 local			VAR=`TOTAL'/`DDL'
@@ -81,12 +81,12 @@ ci means		DIFF, level(95)
 keep			Y0 Y1
 generate		SCHOOL=_n
 order			SCHOOL Y0
-reshape	long	Y, i(SCHOOL) j(D)
+reshape	long		Y, i(SCHOOL) j(D)
 gsort			-D SCHOOL
 
 putdocx			begin
 oneway			Y D
 putdocx save	onewaytable, replace
-by D, sort: su 	Y
+by D, sort: su 		Y
 regress			Y D
 ttest			Y, by(D)
