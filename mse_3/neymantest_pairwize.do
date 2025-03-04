@@ -54,9 +54,9 @@ matrix define	MAT=e(b)
 local			TOTAL=MAT[1,1]
 local			DDL=(e(N)/1)*(e(N)/1-1) // Attention e(N) est déjà N/2
 local			VAR=`TOTAL'/`DDL'
-di				`VAR'
-di				"Neyman (pairwise) :"
-di				"IC=[" `MEAN'-1.96*sqrt(`VAR') " ;" `MEAN'+1.96*sqrt(`VAR') "]"
+display			`VAR'
+display			"Neyman (pairwise) :"
+display			"IC=[" `MEAN'-1.96*sqrt(`VAR') " ;" `MEAN'+1.96*sqrt(`VAR') "]"
                                                                 
 * Estimateur de la variance à la Neyman (pas pairwise)
 summarize		Y1
