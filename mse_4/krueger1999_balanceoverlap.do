@@ -47,7 +47,7 @@ oneway			FL cltypek, tabulate
 
 /*		White/Asian */
 generate		WA=(srace==1|srace==3)
-by 				cltypek, sort:	///
+by				cltypek, sort:	///
 	su			WA
 regress			WA KG_*
 
