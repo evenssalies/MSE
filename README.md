@@ -1,7 +1,9 @@
-## Statistical Evaluation Methods
+## Méthodes statistiques d'évaluation
 
-The course "Méthodes statistiques d'évaluation" is in French. Comments in example programs will sometimes be in English.
+<img src="http://www.evens-salies.com/pagedegarde.png" alt="Page de garde" width="200">
 
-### *This repository is still under construction; revising and uploading my programs here will take some time ...*
+Cours de Méthodes statistiques d'évaluation des politiques publiques et des programmes. La dernière version des notes de cours sont là : [MSE](http://evens-salies.com/2024_MSE.pdf). Cours de 30h [Méthodes statistiques d'évaluation](https://syllabus.univ-cotedazur.fr/fr/course-info/bbd08666-ad1e-41ff-a8c3-db6bd155e4a6/view/light) enseigné en Master 2 d'&Eacute;conomie, Parcours Expertise et Analyse des Données &Eacute;conomiques de l'Université Côte d'Azur, à l'&Eacute;cole Universitaire de Recherche &Eacute;conomie et Management.
 
-Link to the latest version of the lecture notes in __book format__ : [MSE](http://evens-salies.com/2024_MSE.pdf)
+### *Répertoire en construction, le temps que je révise et verse les programmes*
+
+
