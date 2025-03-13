@@ -40,7 +40,7 @@ set		seed 21041971
 
 forvalue	I=1(1)`REP' {
  quietly {
-	set obs		10000
+set obs		10000
     drawnorm		Y D X1 X2, corr(R)
     replace		D=(D>0)
     replace		X1=1+autocode(X1,4,-2.0,2.0)
