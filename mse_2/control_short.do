@@ -27,7 +27,7 @@ drawnorm	Y D X1 X2, corr(R)
 replace		D=(D>0)							
 replace		X1=1+autocode(X1,4,-2.0,2.0)	
 /*	Note : 4 categ.
-		upper bound de (-2,-1] (-1,0] (0,1] (1,2] et +1, ce qui donne
+        upper bound de (-2,-1] (-1,0] (0,1] (1,2] et +1, ce qui donne
                             0      1     2     3} */
 
 regress		Y D X1 X2
