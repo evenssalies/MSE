@@ -9,8 +9,8 @@
 		X2 : correle a Y seulement */
 			
 clear
-set         obs 10000
-do          "http://www.evens-salies.com/localhost.do"
+set			obs 10000
+do			"http://www.evens-salies.com/localhost.do"
 
 /* La matrice de correlation
                       Y,    D,   X1,   X2 */
