@@ -36,7 +36,7 @@ drop		Y D X1 X2
 
 local		REP=500
 matrix		V1=J(3,`REP',0)
-set			seed 21041971
+set		seed 21041971
 
 forvalue	I=1(1)`REP' {
  quietly {
