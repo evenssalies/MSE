@@ -40,21 +40,21 @@ set			seed 21041971
 
 forvalue	I=1(1)`REP' {
  quietly {
-	set obs			10000
+	set obs		10000
     drawnorm		Y D X1 X2, corr(R)
-    replace			D=(D>0)
-    replace			X1=1+autocode(X1,4,-2.0,2.0)
+    replace		D=(D>0)
+    replace		X1=1+autocode(X1,4,-2.0,2.0)
   * Le modele complet
-    regress			Y D X1 X2
+    regress		Y D X1 X2
 	matrix define 	V1[1,`I']=_b[D]
   * Le modele sans X2
-    regress			Y D X1
+    regress		Y D X1
 	matrix define 	V1[2,`I']=_b[D]
   * Le modele sans X1
-    regress			Y D X2
+    regress		Y D X2
 	matrix define 	V1[3,`I']=_b[D]
  }
- drop				Y D X1 X2
+ drop			Y D X1 X2
 }
 
 matrix 		V2=V1'
