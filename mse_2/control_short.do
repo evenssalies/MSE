@@ -7,17 +7,17 @@
 		D  : traitement correle a Y, X1 
 		X1 : variable de confusion correlee a D et Y
 		X2 : correle a Y seulement */
-
+			
 clear
-set			obs 10000
-do			"http://www.evens-salies.com/localhost.do"
+set         obs 10000
+do          "http://www.evens-salies.com/localhost.do"
 
 /* La matrice de correlation
-                  Y,    D,   X1,   X2 */
-matrix      R=(1.00,  .75,  .50,  .25\ ///
-                .75, 1.00,  .50,  .00\ ///
-                .50,  .50, 1.00,  .00\ ///
-                .25,  .00,  .00, 1.00)
+                      Y,    D,   X1,   X2 */
+matrix          R=(1.00,  .75,  .50,  .25\ ///
+                    .75, 1.00,  .50,  .00\ ///
+                    .50,  .50, 1.00,  .00\ ///
+                    .25,  .00,  .00, 1.00)
 
 /* Une simulation d'essai */
 matlist		R
