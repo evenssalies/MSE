@@ -7,7 +7,7 @@
 				Commune de Biot.
 		Funding: 	Conseil Régional PACA.
 			
-	Data are anonymized data */
+	Data are anonymized */
 
 set more off					
 drop			_all
