@@ -84,7 +84,7 @@ meandiffvector
 hist(meandiffvector)
 abline(v=5.067, col = "red", untf = FALSE)
 
-# p-value (le premier vecteur [1,20] est celui qui donne 5.067)
+# p-value (le dernier vecteur [1,20] est celui qui donne 5.067)
 frequency <- table(meandiffvector >= meandiffvector[1,20])
 frequency
 frequency[2]/sum(frequency)
