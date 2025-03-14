@@ -13,7 +13,7 @@ set more off
 drop			_all
 
 /*	Remove email adresses from the original data
-use 			"ticelec_2011_Subscriptions_2.dta", clear
+use 			".../ticelec_2011_Subscriptions_2.dta", clear
 drop			addressemail
 save			"ticelec.dta"
 */
