@@ -18,7 +18,7 @@ drop			addressemail
 save			"ticelec.dta"
 */
 
-use 			"/mse_3/ticelec.dta", clear
+use 			"ticelec.dta", clear
 
 /* Rename, arrange raw data */
 drop			surface accomodation billestiindiv income floors
