@@ -13,8 +13,7 @@ library(ggplot2)
 library(psych)
 
 # Charger les données
-url <- "http://www.evens-salies.com/webstar.dta"
-data <- read_dta(url)
+data <- read_dta("webstar.dta")
 
 # Trier les données
 data <- data[order(names(data))]
