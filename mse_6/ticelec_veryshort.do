@@ -23,19 +23,8 @@ global			MYREPO="$GITHUB"+"evenssalies/MSE/main/mse_6/"
 local			FILEIN="$MYREPO"+"ticelec_consumption_bimonthly_final.dta"
 use 			"`FILEIN'", clear
 
-/*	Nomme les groupes */
-label define		LABEL1 0 "Control" 1 "Treated"
-label values		GROUP LABEL1
-
-label define		LABEL2 0 "wheel" 1 "digital"
-label values		METER LABEL2
-
-/*	Ménage sans information */
-drop if			METER==.&DIST==.
-
-/*	Groupes */
+/*	Tableau des fréquences */
 cls
-keep			GROUP METER DIST INDIV
 table			GROUP METER 
 
 /* Nuage de points DIST p/ METER */
