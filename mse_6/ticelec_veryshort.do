@@ -18,10 +18,10 @@ label drop		_all
 cls
 clear			all
 
-global			GITHUB="https://raw.githubusercontent.com/"
-global			MYREPO="$GITHUB"+"evenssalies/MSE/main/mse_6/"
-local			FILEIN="$MYREPO"+"ticelec_consumption_bimonthly_final.dta"
-use 			"`FILEIN'", clear
+global		GITHUB="https://raw.githubusercontent.com/"
+global		MYREPO="$GITHUB"+"evenssalies/MSE/main/mse_6/"
+local		FILEIN="$MYREPO"+"ticelec_consumption_bimonthly_final.dta"
+use 		"`FILEIN'", clear
 
 /*	Nomme les groupes */
 label define	LABEL1 0 "Control" 1 "Treated"
