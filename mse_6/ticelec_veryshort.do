@@ -18,17 +18,17 @@ label drop		_all
 cls
 clear			all
 
-global		GITHUB="https://raw.githubusercontent.com/"
-global		MYREPO="$GITHUB"+"evenssalies/MSE/main/mse_6/"
-local		FILEIN="$MYREPO"+"ticelec_consumption_bimonthly_final.dta"
-use 		"`FILEIN'", clear
+global			GITHUB="https://raw.githubusercontent.com/"
+global			MYREPO="$GITHUB"+"evenssalies/MSE/main/mse_6/"
+local			FILEIN="$MYREPO"+"ticelec_consumption_bimonthly_final.dta"
+use 			"`FILEIN'", clear
 
 /*	Nomme les groupes */
-label define	LABEL1 0 "Control" 1 "Treated"
-label values	GROUP LABEL1
+label define		LABEL1 0 "Control" 1 "Treated"
+label values		GROUP LABEL1
 
-label define	LABEL2 0 "wheel" 1 "digital"
-label values	METER LABEL2
+label define		LABEL2 0 "wheel" 1 "digital"
+label values		METER LABEL2
 
 /*	Ménage sans information */
 drop if			METER==.&DIST==.
