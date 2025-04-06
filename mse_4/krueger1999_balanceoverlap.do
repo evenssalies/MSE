@@ -66,8 +66,8 @@ sort			D X
 
 /*			N'apporte pas beaucoup d'information */
 cls
-by 				D, sort: 	///
-	su			X
+by 			D, sort: 	///
+	su		X
 
 /*			Informatif */
 table			D X
