@@ -63,9 +63,16 @@ clonevar		D=cltypek
 keep			D X
 order			D
 sort			D X
+
+/*			N'apporte pas beaucoup d'information */
 cls
-by			D, sort: 	///
-	su		X
+by 				D, sort: 	///
+	su			X
+
+/*			Informatif */
+table			D X
+
+/*			Un graphique est aussi bien */
 generate		ONE=1
 egen			XN=count(X), by(D)
 egen			XFREQ=count(ONE), by(D X)
