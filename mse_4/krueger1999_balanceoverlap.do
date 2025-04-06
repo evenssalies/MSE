@@ -29,10 +29,10 @@ replace			FL=2-FL
 /*			Two groups (small class vs regular+aid): normalised difference */
 summarize		FL if KG_1==1
 local			MEAN1=r(mean)
-local			S1=r(sd)
+local			S1=r(sd)^2
 summarize		FL if KG_3==1
 local			MEAN0=r(mean)
-local			S0=r(sd)
+local			S0=r(sd)^2
 local			MEANDIFF=`MEAN1'-`MEAN0'
 local			NORMDIFF=abs(`MEANDIFF'/sqrt(0.5*(`S1'+`S0')))
 display 		"Difference des moyennes des X: " `MEANDIFF' 		
