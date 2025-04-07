@@ -29,10 +29,10 @@ use 				"http://www.evens-salies.com/artificial.dta", clear
 * Desequilibre
 summarize			x if w==1
 local				MEAN1=r(mean)
-local				S1=r(sd)
+local				S1=r(sd)^2
 summarize			x if w==0
 local				MEAN0=r(mean)
-local				S0=r(sd)
+local				S0=r(sd)^2
 local				MEANDIFF=`MEAN1'-`MEAN0'
 local				NORMDIFF=abs(`MEANDIFF'/sqrt(0.5*(`S1'+`S0')))
 cls
