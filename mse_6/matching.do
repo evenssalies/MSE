@@ -7,7 +7,7 @@
 
 import excel using	"http://www.evens-salies.com/cardkruegershort.xlsx", ///
 	clear firstrow
-do					"http://www.evens-salies.com/localhost.do"
+do				"http://www.evens-salies.com/localhost.do"
 
 rename				(unit d x1 x2 y)(INDI D CHAIN JOBINI JOBFIN)
 
