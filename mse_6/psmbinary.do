@@ -20,15 +20,15 @@ label variable		CHAIN "KFC = 0, BK = 1"
 label variable		JOBINI "Emploi initial"
 
 * Score de propension (first period)
-logit				D CHAIN JOBINI	// New Jersey (treated) = 1
+logit			D CHAIN JOBINI	// New Jersey (treated) = 1
 
 * Prediction du score avec predict, sans l'option [, xb] car ce n'est pas Xb que
 *	l'on souhaite predire, mais Pr(D=1|X=x):=e(x)
-predict				PSCORE	// L'option [, pr] est par defaut
+predict			PSCORE	// L'option [, pr] est par defaut
 
 * Trie e(x) par ordre decroissant dans chaque groupe 
-order				INDI D PSCORE
-gsort				-D -PSCORE 
+order			INDI D PSCORE
+gsort			-D -PSCORE 
 
 ******************************
 * Triming (dans les groupes) *
@@ -37,9 +37,9 @@ gsort				-D -PSCORE
 * Region possible : le max des bornes inf et le min des bornes sup
 *	D=1 ].146;.705[ ET D=0 ].013;.595[, donc : [.14;.60]
 *	On prend le min=max{min_0,min_1}, max=min{max_0,max_1}
-generate			KEEP=(PSCORE>=.14&PSCORE<=.60)
-count if 			KEEP==1
-order				KEEP, after(PSCORE)
+generate		KEEP=(PSCORE>=.14&PSCORE<=.60)
+count if 		KEEP==1
+order			KEEP, after(PSCORE)
 
 * Overlay histograms of covariates
 * 	JOBINI
