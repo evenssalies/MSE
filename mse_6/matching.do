@@ -5,9 +5,8 @@
 * Sous-echantillon de Card et Krueger (1994)
 ********************************************
 
-import excel using	"http://www.evens-salies.com/cardkruegershort.xlsx", ///
+import excel using	"cardkrueger1994_short.xlsx", ///
 	clear firstrow
-do				"http://www.evens-salies.com/localhost.do"
 
 rename				(unit d x1 x2 y)(INDI D CHAIN JOBINI JOBFIN)
 
