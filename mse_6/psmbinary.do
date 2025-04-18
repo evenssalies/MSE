@@ -1,12 +1,15 @@
-* Evens Salies
-* PSM, v1.3 10/2019, 12/2020, 12/2021, 04/2023
-
+/* PSM
+		v1 10/2019, v5 04/2025
+		Evens Salies */
+ 
 **********************************************
 * Sous-echantillon de Card et Krueger (1994) *
 **********************************************
 
 cls
-import excel using	"cardkrueger1994_short.xlsx", clear firstrow
+do					"http://www.evens-salies.com/localhost.do" doc
+import excel using	"http://www.evens-salies.com/cardkruegershort.xlsx", ///
+	clear firstrow
 
 rename				unit 	INDI
 rename				d 		D
@@ -14,6 +17,7 @@ rename				x1 		CHAIN
 rename				x2 		JOBINI
 rename				y 		JOBFIN
 label variable		CHAIN "KFC = 0, BK = 1"
+label variable		JOBINI "Emploi initial"
 
 * Score de propension (first period)
 logit				D CHAIN JOBINI	// New Jersey (treated) = 1
@@ -41,11 +45,17 @@ order				KEEP, after(PSCORE)
 * 	JOBINI
 twoway (histogram JOBINI if D==1, width(1) color(green)) ///
 	(histogram JOBINI if D==0, width(1) fcolor(none) lcolor(black)), ///
-	legend(order(1 "New Jersey" 2 "Pennsylvania" )) saving(psmbinary1, replace)
+	subtitle("Sans appariement") ///
+	xlabel(0(5)40) ylabel(0(.1).4) ytitle("Densité") ///
+	legend(order(1 "New Jersey" 2 "Pennsylvania" ) position(12) ring(0)) ///
+	saving(psmbinary1, replace)
 
 twoway (histogram JOBINI if D==1&KEEP==1, width(1) color(green)) ///
 	(histogram JOBINI if D==0&KEEP==1, width(1) fcolor(none) lcolor(black)), ///
-	legend(order(1 "New Jersey" 2 "Pennsylvania" )) saving(psmbinary2, replace)
+	subtitle("Avec appariement") ///
+	xlabel(0(5)40) ylabel(0(.1).4) ytitle("") ///
+	legend(off) ///
+	saving(psmbinary2, replace)
 
 graph combine	psmbinary1.gph psmbinary2.gph
 
@@ -79,6 +89,7 @@ generate		JOBINI=empft+0.5*emppt
 drop if			chain>2	// keep BK and KFC
 * firstinc : usual amount of first raise ($/hr)
 * wage_st : starting wage ($/hr); NA
+keep			state JOBINI chain wage_st firstinc
 
 * Score de propension (first period)
 capture drop	SCORE LOGIT KEEP
@@ -87,6 +98,8 @@ predict			SCORE
 predict			LOGIT, xb
 *	There are missing predictions coz there are missing X
 keep if			SCORE!=.
+label variable	SCORE "Score de propension"
+label variable	LOGIT "Score de propension linéarisé"
 order			state SCORE
 gsort			-state -SCORE
 *		D=1 ].594;.984[ ET D=0 ].160;.939[, donc, au mieux : [.60;.93]
@@ -95,26 +108,42 @@ order			KEEP, after(SCORE)
 *					  SCORE>=.713&SCORE<=.894) marche encore mieux !!!
 
 * Overlay histograms of the predictions (SCORE)
-twoway 			(histogram SCORE if state==1, width(.02) color(green)) ///
-				(histogram SCORE if state==0, width(.02) fcolor(none) ///
-				lcolor(black)), legend(order(1 "New Jersey" 2 "Pennsylvania" )) ///
-				saving(psmbinary1, replace)
-twoway 			(histogram SCORE if state==1&KEEP==1, width(.02) color(green)) ///
-				(histogram SCORE if state==0&KEEP==1, width(.02) fcolor(none) ///
-				lcolor(black)), legend(order(1 "New Jersey" 2 "Pennsylvania" )) ///
-				saving(psmbinary2, replace)
-graph combine	psmbinary1.gph psmbinary2.gph
+su				SCORE if KEEP==1
+replace			SCORE=(SCORE-r(mean))/r(sd)
+twoway		(histogram SCORE if state==1, width(.25) color(green)) ///
+	(histogram SCORE if state==0, width(.25) fcolor(none) ///
+	lcolor(black)), legend(order(1 "New Jersey" 2 "Pennsylvania" )) ///
+	subtitle("Sans appariement") ///
+	xlabel(-12(2)4) ylabel(0(.2)1) ytitle("Densité") ///
+	legend(position(9) ring(0)) ///
+	saving(psmbinary1, replace)
+twoway		(histogram SCORE if state==1&KEEP==1, width(.25) color(green)) ///
+	(histogram SCORE if state==0&KEEP==1, width(.25) fcolor(none) ///
+	lcolor(black)), legend(order(1 "New Jersey" 2 "Pennsylvania" )) ///
+	subtitle("Avec appariement") ///
+	xlabel(-12(2)4) ylabel(0(.2)1) ytitle("Densité") ///
+	legend(off) ///
+	saving(psmbinary2, replace)
+graph combine	psmbinary1.gph psmbinary2.gph, rows(2) xsize(3) ysize(4)
 
 * Overlay histograms of the predictions (LOGIT)
-twoway 			(histogram LOGIT if state==1, width(.1) color(green)) ///
-				(histogram LOGIT if state==0, width(.1) fcolor(none) ///
-				lcolor(black)), legend(order(1 "New Jersey" 2 "Pennsylvania" )) ///
-				saving(psmbinary1, replace)
-twoway 			(histogram LOGIT if state==1&KEEP==1, width(.1) color(green)) ///
-				(histogram LOGIT if state==0&KEEP==1, width(.1) fcolor(none) ///
-				lcolor(black)), legend(order(1 "New Jersey" 2 "Pennsylvania" )) ///
-				saving(psmbinary2, replace)
-graph combine	psmbinary1.gph psmbinary2.gph
+su				LOGIT if KEEP==1
+replace			LOGIT=(LOGIT-r(mean))/r(sd)
+twoway		(histogram LOGIT if state==1, width(.25) color(green)) ///
+	(histogram LOGIT if state==0, width(.25) fcolor(none) ///
+	lcolor(black)), legend(order(1 "New Jersey" 2 "Pennsylvania" )) ///
+	subtitle("Sans appariement") ///
+	xlabel(-8(2)6) ylabel(0(.2).8) ytitle("Densité") ///
+	legend(position(1) ring(0)) ///
+	saving(psmbinary1, replace)
+twoway		(histogram LOGIT if state==1&KEEP==1, width(.25) color(green)) ///
+	(histogram LOGIT if state==0&KEEP==1, width(.25) fcolor(none) ///
+	lcolor(black)), legend(order(1 "New Jersey" 2 "Pennsylvania" )) ///
+	subtitle("Avec appariement") ///
+	xlabel(-8(2)6) ylabel(0(.2).8) ytitle("Densité") ///
+	legend(off) ///
+	saving(psmbinary2, replace)
+graph combine	psmbinary1.gph psmbinary2.gph, rows(2) xsize(3) ysize(4)
 
 *****************************************************************************
 * Sous-echantillon de Dehejia et Wahba (2002) des donnees de Lalonde (1986) *
