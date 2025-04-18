@@ -7,15 +7,15 @@
 **********************************************
 
 cls
-do					"http://www.evens-salies.com/localhost.do" doc
+do			"http://www.evens-salies.com/localhost.do" doc
 import excel using	"http://www.evens-salies.com/cardkruegershort.xlsx", ///
 	clear firstrow
 
-rename				unit 	INDI
-rename				d 		D
-rename				x1 		CHAIN
-rename				x2 		JOBINI
-rename				y 		JOBFIN
+rename			unit 	INDI
+rename			d	D
+rename			x1	CHAIN
+rename			x2	JOBINI
+rename			y 	JOBFIN
 label variable		CHAIN "KFC = 0, BK = 1"
 label variable		JOBINI "Emploi initial"
 
