@@ -6,8 +6,7 @@
 **********************************************
 
 cls
-do					"http://www.evens-salies.com/localhost.do"
-import excel using	"http://www.evens-salies.com/cardkruegershort.xlsx", ///
+import excel using	"http://www.evens-salies.com/cardkrueger1994_short.xlsx", ///
 	clear firstrow
 
 rename				unit 	INDI
