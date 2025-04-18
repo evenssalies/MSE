@@ -6,8 +6,7 @@
 **********************************************
 
 cls
-import excel using	"http://www.evens-salies.com/cardkrueger1994_short.xlsx", ///
-	clear firstrow
+import excel using	"cardkrueger1994_short.xlsx", clear firstrow
 
 rename				unit 	INDI
 rename				d 		D
