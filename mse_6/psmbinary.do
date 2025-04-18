@@ -92,23 +92,23 @@ drop if			chain>2	// keep BK and KFC
 keep			state JOBINI chain wage_st firstinc
 
 * Score de propension (first period)
-capture drop	SCORE LOGIT KEEP
+capture drop		SCORE LOGIT KEEP
 logit			state JOBINI chain wage_st firstinc, or		// New Jersey (treated) = 1
 predict			SCORE
 predict			LOGIT, xb
 *	There are missing predictions coz there are missing X
 keep if			SCORE!=.
-label variable	SCORE "Score de propension"
-label variable	LOGIT "Score de propension linéarisé"
+label variable		SCORE "Score de propension"
+label variable		LOGIT "Score de propension linéarisé"
 order			state SCORE
 gsort			-state -SCORE
-*		D=1 ].594;.984[ ET D=0 ].160;.939[, donc, au mieux : [.60;.93]
+*	D=1 ].594;.984[ ET D=0 ].160;.939[, donc, au mieux : [.60;.93]
 generate		KEEP=(SCORE>=.60&SCORE<=.93)
 order			KEEP, after(SCORE)
-*					  SCORE>=.713&SCORE<=.894) marche encore mieux !!!
+*	SCORE>=.713&SCORE<=.894) marche encore mieux !!!
 
 * Overlay histograms of the predictions (SCORE)
-su				SCORE if KEEP==1
+su			SCORE if KEEP==1
 replace			SCORE=(SCORE-r(mean))/r(sd)
 twoway		(histogram SCORE if state==1, width(.25) color(green)) ///
 	(histogram SCORE if state==0, width(.25) fcolor(none) ///
