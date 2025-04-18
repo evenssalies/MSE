@@ -83,7 +83,7 @@ graph combine	psmbinary1.gph psmbinary2.gph
 ************************************************
 * Donnees originales de Card et Krueger (1994) *
 ************************************************
-use				"http://www.evens-salies.com/fastfood.dta", clear
+use			"http://www.evens-salies.com/fastfood.dta", clear
 
 generate		JOBINI=empft+0.5*emppt
 drop if			chain>2	// keep BK and KFC
