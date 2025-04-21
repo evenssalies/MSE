@@ -1,7 +1,7 @@
 /****************************************************************************************/
 /*	In progress.									*/
 /*	Select variables of the propensity score by using the 3-stage I&R's 2015	*/
-/*	stepwise procedure. Use a logit prediction model		         	*/
+/*	stepwise procedure (section 13.3 of the book). Use a logit prediction model    	*/
 /*		Todo list: make the command program for any number of variables.	*/
 /* 		+ Note about stage 2: needs to be optimized			 	*/
 /*		+ link to the right template file					*/
