@@ -7,28 +7,28 @@
 **********************************************
 
 cls
-do			"http://www.evens-salies.com/localhost.do" doc
+do					"http://www.evens-salies.com/localhost.do" doc
 import excel using	"http://www.evens-salies.com/cardkruegershort.xlsx", ///
 	clear firstrow
 
-rename			unit 	INDI
-rename			d	D
-rename			x1	CHAIN
-rename			x2	JOBINI
-rename			y 	JOBFIN
+rename				unit 	INDI
+rename				d 		D
+rename				x1 		CHAIN
+rename				x2 		JOBINI
+rename				y 		JOBFIN
 label variable		CHAIN "KFC = 0, BK = 1"
 label variable		JOBINI "Emploi initial"
 
 * Score de propension (first period)
-logit			D CHAIN JOBINI	// New Jersey (treated) = 1
+logit				D CHAIN JOBINI	// New Jersey (treated) = 1
 
 * Prediction du score avec predict, sans l'option [, xb] car ce n'est pas Xb que
 *	l'on souhaite predire, mais Pr(D=1|X=x):=e(x)
-predict			PSCORE	// L'option [, pr] est par defaut
+predict				PSCORE	// L'option [, pr] est par defaut
 
 * Trie e(x) par ordre decroissant dans chaque groupe 
-order			INDI D PSCORE
-gsort			-D -PSCORE 
+order				INDI D PSCORE
+gsort				-D -PSCORE 
 
 ******************************
 * Triming (dans les groupes) *
@@ -37,9 +37,9 @@ gsort			-D -PSCORE
 * Region possible : le max des bornes inf et le min des bornes sup
 *	D=1 ].146;.705[ ET D=0 ].013;.595[, donc : [.14;.60]
 *	On prend le min=max{min_0,min_1}, max=min{max_0,max_1}
-generate		KEEP=(PSCORE>=.14&PSCORE<=.60)
-count if 		KEEP==1
-order			KEEP, after(PSCORE)
+generate			KEEP=(PSCORE>=.14&PSCORE<=.60)
+count if 			KEEP==1
+order				KEEP, after(PSCORE)
 
 * Overlay histograms of covariates
 * 	JOBINI
@@ -83,7 +83,7 @@ graph combine	psmbinary1.gph psmbinary2.gph
 ************************************************
 * Donnees originales de Card et Krueger (1994) *
 ************************************************
-use			"http://www.evens-salies.com/fastfood.dta", clear
+use				"http://www.evens-salies.com/fastfood.dta", clear
 
 generate		JOBINI=empft+0.5*emppt
 drop if			chain>2	// keep BK and KFC
@@ -92,23 +92,23 @@ drop if			chain>2	// keep BK and KFC
 keep			state JOBINI chain wage_st firstinc
 
 * Score de propension (first period)
-capture drop		SCORE LOGIT KEEP
+capture drop	SCORE LOGIT KEEP
 logit			state JOBINI chain wage_st firstinc, or		// New Jersey (treated) = 1
 predict			SCORE
 predict			LOGIT, xb
 *	There are missing predictions coz there are missing X
 keep if			SCORE!=.
-label variable		SCORE "Score de propension"
-label variable		LOGIT "Score de propension linéarisé"
+label variable	SCORE "Score de propension"
+label variable	LOGIT "Score de propension linéarisé"
 order			state SCORE
 gsort			-state -SCORE
-*	D=1 ].594;.984[ ET D=0 ].160;.939[, donc, au mieux : [.60;.93]
+*		D=1 ].594;.984[ ET D=0 ].160;.939[, donc, au mieux : [.60;.93]
 generate		KEEP=(SCORE>=.60&SCORE<=.93)
 order			KEEP, after(SCORE)
-*	SCORE>=.713&SCORE<=.894) marche encore mieux !!!
+*					  SCORE>=.713&SCORE<=.894) marche encore mieux !!!
 
 * Overlay histograms of the predictions (SCORE)
-su			SCORE if KEEP==1
+su				SCORE if KEEP==1
 replace			SCORE=(SCORE-r(mean))/r(sd)
 twoway		(histogram SCORE if state==1, width(.25) color(green)) ///
 	(histogram SCORE if state==0, width(.25) fcolor(none) ///
@@ -146,7 +146,7 @@ twoway		(histogram LOGIT if state==1&KEEP==1, width(.25) color(green)) ///
 graph combine	psmbinary1.gph psmbinary2.gph, rows(2) xsize(3) ysize(4)
 
 *****************************************************************************
-* Sous-echantillon de Dehejia et Wahba (2002) des donnees de Lalonde (1986) *
+* Sous-echantillon de Dehejia et Wahba (2002) des données de Lalonde (1986) *
 * Algorithme de Dehejia et Wahba pour l'estimation du Score de Propension   *
 *****************************************************************************
 
@@ -157,45 +157,41 @@ cls
 Donnees avec les deux groupes randomisés, les HOMMES seulement
 
 	Echantillon de Lalonde (1986) du National Supported Work (NSW) program
-		acces direct : http://users.nber.org/~rdehejia/data/nsw.dta
+		acces direct : http://users.nber.org/~rdehejia/data/nsw.dta */
 
-		use 	"http://www.evens-salies.com/nsw.dta", clear
-		table	treat	// N_1=297, N_0=425, N=722
-		des
+use 	"http://www.evens-salies.com/nsw.dta", clear
+table	treat	// N_1=297, N_0=425, N=722
+des
 		
-		Contient les variables listees dans l'encadre du cours,
+/*		Contient les variables listees dans l'encadre du cours,
 			sauf re74 (salaire en 74). Ces variables :
 		treat (formation ou pas), age, education (#annees d'etudes), black,
 		hispanic, married, nodegree (pas de diplome de niveau lycee+, re75 
-		(salaire en 75), re78 (en 78, la variable de resultat) 
+		(salaire en 75), re78 (en 78, la variable de resultat) */
 
-	Sous-echantillon de Dehejia et Wahba (2002) de Lalonde (1986),
-		acces direct : http://users.nber.org/~rdehejia/data/nsw_dw.dta
+/*	Sous-echantillon de Dehejia et Wahba (2002) de Lalonde (1986),
+		acces direct : http://users.nber.org/~rdehejia/data/nsw_dw.dta */
 
-		use		"http://www.evens-salies.com/nsw_dw.dta", clear
-		table	treat	// N_1=185, N_0=260, N=445
-		des
+use		"http://www.evens-salies.com/nsw_dw.dta", clear
+table	treat	// N_1=185, N_0=260, N=445
+des
 		
-		Contient une variable de plus : re74
+/*		Contient une variable de plus : re74 */
 
-		Comparaison de quelques variables de pre-traitement */
+/*		Comparaison de quelques variables de pre-traitement */
 estpost tabstat		age education black hispanic married nodegree re74 re75, ///
-					by(treat) statistics(mean semean) columns(statistics) ///
-					listwise nototal
-esttab ., main(mean) aux(semean) unstack
-
-/*		Remarque :	on peut utiliser l'option label si les variables ont des
-					étiquettes. Les noms sont deja suffisemment explicites */
+	by(treat) statistics(mean semean n) columns(statistics) ///
+	listwise nototal
+esttab 				., main(mean) aux(semean) unstack
 
 /*
 	Sous-echantillon de Imbens et Rubin (2015, p. 144-145), qui est le meme que
-		celui de Dehejia et Wahba (2002), mais avec deux variables en plus :
-			dummy de salaire nul associée à re74=0
-			dummy de salaire nul associée à re75=0
+	 celui de Dehejia et Wahba (2002), mais avec deux variables en plus :
+		dummy de salaire nul associée à re74=0
+		dummy de salaire nul associée à re75=0 
 
-		Attention à l'unite des salaires (millier ?) */
-
-/*	Montrer que la part des salaires nuls en 74 et 75 est un vrai problème */
+	Avant, montrer que la part des salaires nuls en 74 et 75 est un problème */
+cls
 qui {
 		count if	treat==1
 		local		N1=r(N)
@@ -204,22 +200,23 @@ qui {
 		count if 	re74==0
 noi:	display		"Salaires de 74 nuls : " r(N)/_N		
 		count if 	re74==0&treat==1
-noi:	display		"Salaires de 74 nuls chez Treated : " r(N)/`N1'		
+noi:	display		"Salaires de 74 nuls dans le groupe test : " r(N)/`N1'		
 		count if	re74==0&treat==0
-noi:	display		"Salaires de 74 nuls chez Controls : " r(N)/`N0'		
+noi:	display		"Salaires de 74 nuls dans le groupe témoin : " r(N)/`N0'
+noi:	display		"-----"
 		count if	re75==0
 noi:	display		"Salaires de 75 nuls : " r(N)/_N		
 		count if	re75==0&treat==1
-noi:	display		"Salaires de 75 nuls chez treated : " r(N)/`N1'		
+noi:	display		"Salaires de 75 nuls dans le groupe test : " r(N)/`N1'		
 		count if	re75==0&treat==0
-noi:	display		"Salaires de 75 nuls chez controls : " r(N)/`N0'		
-noi:	display		" "
+noi:	display		"Salaires de 75 nuls dans le groupe témoin : " r(N)/`N0'		
+noi:	display		"-----"
 		count if	re78==0
 noi:	display		"Salaires de 78 nuls : " r(N)/_N		
 		count if	re78==0&treat==1
-noi:	display		"Salaires de 78 nuls chez treated : " r(N)/`N1'		
+noi:	display		"Salaires de 78 nuls dans le groupe test : " r(N)/`N1'		
 		count if	re78==0&treat==0
-noi:	display		"Salaires de 78 nuls chez controls : " r(N)/`N0'		
+noi:	display		"Salaires de 78 nuls dans le groupe témoin : " r(N)/`N0'		
 }
 /* 		Résultat : on retrouve .75 .68 .71 .6 d'I&R (2015, Tbl. 14.6, p. 329) */
 
@@ -247,24 +244,29 @@ generate	VIA3=RE750*education
 		rendre certaines variables explicatives non-significatives. */
 stepwise	, pr(.4): ///
  logit		treat age (re74 re75) (RE740 RE750) hispanic black ///
-		 		  (nodegree education) (VIA*)
+	(nodegree education) (VIA*)
 
 /*	Prediction du modele et du score */
-predict				SCORE, pr
-predict				LOGIT, xb
-order				treat SCORE LOGIT
-count if			SCORE==.	// Toutes les predictions sont calculees
+predict		SCORE, pr
+predict		LOGIT, xb
+order		treat SCORE LOGIT
+count if	SCORE==.	// Toutes les predictions sont calculees
 
 /*	Etendue dans chaque groupe */
-gsort				-treat -SCORE
-/*		Résultat : ??? */
-
-/*	En passant, verifie qu'il y a plus de D=1 pour des niveaux plus eleves du
-		score, le seuil etant la mediane (#Pr(D=1|X) > mediane) */
-sort				SCORE
-display				SCORE[_N/2]	// Score median
-count if			treat==1&_n<=_N/2
-count if			treat==1&_n>_N/2
+gsort		-treat -SCORE
+quietly {
+	su			SCORE if treat==1, d
+	local		MIN1=r(min)
+	local		MAX1=r(max)
+	su			SCORE if treat==0, d
+	local		MIN0=r(min)
+	local		MAX0=r(max)
+	noi: di 	"Pour D=0 : ]" %5.3f `MIN0' " ; " %5.3f `MAX0' "[" ///
+				_newline ///
+				"Pour D=1 : ]" %5.3f `MIN1' " ; " %5.3f `MAX1' "[" ///
+				_newline ///
+				"Au mieux [" %5.3f `MIN1' " ; " %5.3f `MAX0' "]"
+}
 
 /*	Histogrammes du score linearise par groupe avant triming
 		(I&R, 2015, Figures 14.5a, 14.5b) */
@@ -280,7 +282,8 @@ graph twoway 	(histogram NORMAL if (NORMAL>-3)&(NORMAL<3), ///
 					kernel(epanechnikov) bwidth(0.5) lcolor(black) ///
 					lwidth(medthick)), ///
 				xtitle("Score de propension linéarisé") ytitle("Densité") ///
-				xscale(noline titlegap(3)) xlabel() yscale(titlegap(3)) ///
+				xscale(noline titlegap(3)) xlabel() ///
+				yscale(noline titlegap(3)) ///
 				legend(label(1 "N(0,1)") ///
 					   label(2 "Sans formation") ///
 					   label(3 "Avec formation") ///
@@ -305,10 +308,10 @@ qui {
  noi: di 		"* La différence norm. (du score linéarisé) est égale à : " `D'
 *
  if				`D'>1 {
-  noi: di 		"* Les groupes de traitement sont déséquilibrés"
+  noi: di 		"* Les groupes de traitement sont très déséquilibrés"
  }
  else {
-  noi: di 		"* Les groupes de traitement sont équilibrés"
+  noi: di 		"* Les groupes de traitement sont légèrement déséquilibrés"
  }
  noi: di 		"**"
 }
@@ -319,12 +322,12 @@ qui {
 replace		re78=re78/1000
 nnmatch		re78 treat nodegree education hispanic re74 re75 RE* VIA* ///
 			if SCORE>=0.12&SCORE<=0.76, ///
-			tc(ate) m(3)
+			tc(att) m(3)
 regress		re78 treat
 ttest		re78, by(treat) unequal
 regress		re78 treat nodegree education hispanic re74 re75 RE* VIA* ///
 			if SCORE>=0.12&SCORE<=0.76
-/* 	Note : refaire nnmatch avec ate pour voir qu'on est proche de regress */
+/*		Les résultats contrôlés sont proches les uns des autres */
 
 /*
 	Groupe(s) de contrôle non-randomise(s) de Dehejia et Wahba (2002), qui ont
@@ -387,10 +390,10 @@ qui {
  noi: di 		"* La différence norm. (du score linéarisé) est éale à : " `D'
 *
  if				`D'>1 {
-  noi: di 		"* Les groupes de traitement sont déséquilibrés"
+  noi: di 		"* Les groupes de traitement sont très déséquilibrés"
  }
  else {
-  noi: di 		"* Les groupes de traitement sont équilibrés"
+  noi: di 		"* Les groupes de traitement sont légèrement équilibrés"
  }
  noi: di 		"**"
 }
@@ -491,10 +494,10 @@ qui {
  noi: di 		"* La différence norm. (du score linéarisé) est égale à : " `D'
 
  if				`D'>1 {
-  noi: di 		"* Les groupes de traitement sont déséquilibrés"
+  noi: di 		"* Les groupes de traitement sont très déséquilibrés"
  }
  else {
-  noi: di 		"* Les groupes de traitement sont équilibrés"
+  noi: di 		"* Les groupes de traitement sont légèrement équilibrés"
  }
  noi: di 		"**"
 }
@@ -515,7 +518,7 @@ nnmatch		re78 treat ///
 /*	Estimation de l'ECM avec regress */
 regress		re78 treat ///
 			age education black hispanic married nodegree re74 re75 RE* VIA*
-/*	Résultat :	ce n'est pas très loin de l'estimation de l'ECM dans la cas
+/*	Résultat :	ce n'est pas très loin de l'estimation de l'ECM dans le cas
 				randomisé, mais ce n'est pas ce qui nous intéresse !!! et
 				c'est trop éloigné de l'estimation de l'ECM par NNM */
 nnmatch		re78 treat ///
@@ -564,7 +567,7 @@ pscore		treat ///
 			numblo(5) ///		// Nombre de strates au depart
 			logit ///			// Probit par defaut
 			comsup /// 			// generate une dummy de support commun
-			level(0.01) 		// Seuil pour le balancing dans les blocs
+			level(0.01)  		// Seuil pour le balancing dans les blocs
 *			detail
 
 count if	comsup==1
