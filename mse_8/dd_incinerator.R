@@ -1,11 +1,12 @@
 # Wooldridge's (2009) example of Policy analysis with pooled cross sections
-# Data: "KIELMC.raw" (Data and accompanying files : http://www.cengage.com/)
-# from Kiel and McClain's (1995) paper, "The effect of an incinerator siting
-# on housing appreciation rates", Journal of Urban Economics, 37, pp. 311-323. 
-#	J'ai mis les variables là : http://www.evens-salies.com/KIELMC.DES
-# Code: Evens SALIES, 14/11/2017, v2 01/2020
+# 	Data: "KIELMC.raw" (Data and accompanying files : http://www.cengage.com/)
+# 	from Kiel and McClain's (1995) paper, "The effect of an incinerator siting
+# 	on housing appreciation rates", Journal of Urban Economics, 37, p. 311-323. 
+#	Variables description in file "kielmc.des"
+#
+# 		Evens SALIES, v1 14/11/2017, v3 04/2025 
 
-DATA <- read.table("http://www.evens-salies.com/KIELMC.raw", header=FALSE)	
+DATA <- read.table("kielmc.raw", header=FALSE)	
 # Note: R assigne les noms V1, ...	(voir le fichier KIELMC.DES file)	
 
 # Keep the following variables
@@ -34,7 +35,7 @@ TTEST78
 TTEST78$estimate[2]-TTEST78$estimate[1]
 TTEST78$stderr
 
-# Difference-in-difference estimator
+# Difference-in-differences estimator
 TTEST81$estimate[2]-TTEST81$estimate[1]-(TTEST78$estimate[2]-TTEST78$estimate[1])
 
 # Obtained using a regression approach (Eq. 13.7 du Wooldridge, 2009)
