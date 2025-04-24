@@ -6,7 +6,7 @@
 #
 # 		Evens SALIES, v1 14/11/2017, v3 04/2025 
 
-DATA <- read.table("kielmc.raw", header=FALSE)	
+DATA <- read.table("http://www.evens-salies.com/KIELMC.raw", header=FALSE)	
 # Note: R assigne les noms V1, ...	(voir le fichier KIELMC.DES file)	
 
 # Keep the following variables
@@ -23,8 +23,9 @@ colnames(DATA)[colnames(DATA)=="V24"] <- "RPRICE"
 
 # Plus besoin du "chemin" DATA
 attach(DATA)
+View(DATA)
 
-# Naive estimation for 1981 and 1978
+# Différence for 1981 and 1978
 TTEST81 <- t.test(RPRICE~NEARINC, subset(DATA, YEAR==1981), mu=0, var.equal=T)
 TTEST81
 TTEST81$estimate[2]-TTEST81$estimate[1]
@@ -35,11 +36,18 @@ TTEST78
 TTEST78$estimate[2]-TTEST78$estimate[1]
 TTEST78$stderr
 
-# Difference-in-differences estimator
+# To Calculate the standard error manually, say for 1981
+temp1 <- subset(DATA[c("RPRICE")], YEAR == 1981 & NEARINC == 0)
+nrow(temp1)
+temp1 <- subset(DATA[c("RPRICE")], YEAR == 1981 & NEARINC == 1)
+nrow(temp1)
+aggregate(DATA[c("RPRICE")], by=list("Near"=NEARINC, "Year"=YEAR), sd)
+
+# Difference-in-difference estimator
 TTEST81$estimate[2]-TTEST81$estimate[1]-(TTEST78$estimate[2]-TTEST78$estimate[1])
 
 # Obtained using a regression approach (Eq. 13.7 du Wooldridge, 2009)
-M2 <- lm(RPRICE ~ NEARINC + Y81 + NEARINC*Y81)
+M2 <- lm(RPRICE ~ NEARINC + Y81 + NEARINC*Y81,)
 summary(M2)
 
 # beta2
@@ -48,18 +56,10 @@ mean(RPRICE[NEARINC==1&YEAR==1978])-mean(RPRICE[NEARINC==0&YEAR==1978])
 # beta3
 mean(RPRICE[NEARINC==0&YEAR==1981])-mean(RPRICE[NEARINC==0&YEAR==1978])
 
-# Get DD estimates for different models by using the regression approach
-# Estimate equation 13.3 (p. 450) and 13.7 (p. 451), Eq. (13.4)
-M1 <- lm(RPRICE ~ NEARINC, , YEAR == 1981)			
-summary(M1)	
-
-# p-value for M2
-# help(distribution)
-# N(0,1) et T(n) ont des p-value > 0,05 (on calcule la Pr. dans le lower tail)
-pnorm(-1.591, mean = 0, sd = 1, lower.tail = TRUE, log.p = FALSE)
-pt(-1.591, 317, lower.tail = TRUE, log.p = FALSE)
-# Valeur critique dans un test unilatéral
-qt(0.95, 317, lower.tail = FALSE, log.p = FALSE)	# Le quantile
+# For M2, substitute a unilateral to the bilateral test
+onetailed <- summary(M2)
+onetailed$coefficients[c("NEARINC:Y81"), "Pr(>|t|)"]/2
+qt(0.05, 317, lower.tail = TRUE) # Same conclusion from the critical value
 
 # Houses near the incinerator are older: normalized difference
 ybar1 <- mean(AGE[NEARINC==1&YEAR==1981])
@@ -68,10 +68,11 @@ s2bar1 <- sd(AGE[NEARINC==1&YEAR==1981])
 s2bar0 <- sd(AGE[NEARINC==0&YEAR==1981])
 diffnorm <- (ybar1-ybar0)/sqrt((s2bar1^2+s2bar0^2)/2)
 diffnorm
+
+# Extra control variables; more powerful test
 M3 <- lm(RPRICE ~ NEARINC + Y81 + NEARINC + NEARINC*Y81 + AGE + AGE2)	
 summary(M3)								# Col. (2), Tab. 13.2
 
-# Extra control variables (V6 to V12)
 M4 <- M1 <- lm(RPRICE ~ NEARINC + Y81 + NEARINC + Y81*NEARINC + AGE + AGE2 +
  V6 + V9 + V10 + V11 + V12) 					# Col (3), Tab. 13.2
 summary(M4)	# Not necessarily better
