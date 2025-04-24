@@ -62,7 +62,6 @@ xtset			INDI Y81
 
 regress			RPRICE NEARINC Y81 ECMT	// -8146.96
 
-/* On ne peut contrôler à la fois les effets groupe et individuels
-	L'ECMT est quand même bien estimé */
+/* Estimation des effets groupe et individuels */
 xtreg			RPRICE NEARINC Y81 ECMT, fe
-regress			RPRICE NEARINC Y81 ECMT i.INDI, noc
+regress			RPRICE Y81 ECMT i.INDI
