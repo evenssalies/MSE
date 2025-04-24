@@ -25,12 +25,12 @@ colnames(DATA)[colnames(DATA)=="V24"] <- "RPRICE"
 attach(DATA)
 
 # Naive estimation for 1981 and 1978
-TTEST81 <- t.test(RPRICE~NEARINC, subset(DATA, YEAR==1981), mu=0, paired=F, var.equal=T)
+TTEST81 <- t.test(RPRICE~NEARINC, subset(DATA, YEAR==1981), mu=0, var.equal=T)
 TTEST81
 TTEST81$estimate[2]-TTEST81$estimate[1]
 TTEST81$stderr
 
-TTEST78 <- t.test(RPRICE~NEARINC, subset(DATA, YEAR==1978), mu=0, paired=F, var.equal=T)
+TTEST78 <- t.test(RPRICE~NEARINC, subset(DATA, YEAR==1978), mu=0, var.equal=T)
 TTEST78
 TTEST78$estimate[2]-TTEST78$estimate[1]
 TTEST78$stderr
