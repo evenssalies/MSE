@@ -1,8 +1,10 @@
-* Code: Evens SALIES
-* 01/2021, v1
+/* Wooldridge's (2009) example of Policy analysis with pooled cross sections
+ 	Data: "KIELMC.raw" (Data and accompanying files : http://www.cengage.com/)
+ 	from Kiel and McClain's (1995) paper, "The effect of an incinerator siting
+ 	on housing appreciation rates", Journal of Urban Economics, 37, p. 311-323. 
+	Variables description in file "kielmc.des"
 
-* Description des variables
-*	http://www.evens-salies.com/KIELMC.DES
+ 		Evens SALIES, v1 14/11/2017, v3 04/2025 */
 
 import delimited using ///
 	"http://www.evens-salies.com/KIELMC.txt", delimiter(tab) clear
@@ -28,17 +30,18 @@ generate	ECMT=Y81*NEARINC
 
 regress		RPRICE NEARINC Y81 ECMT // 70619.24-101307.51-(63692.86-82517.23)
 
-regress		RPRICE NEARINC Y81 ECMT, ///
-				vce(bootstrap) // 70619.24-101307.51-(63692.86-82517.23)
+keep 		NEARINC Y81 ECMT AGE* RPRICE RPRICEl
+order 		NEARINC Y81 ECMT AGE* RPRICE AGE
+gsort 		-NEARINC -Y81
+ 
+*	Attention au modèle log-linéaire si le vrai modèle est en niveau
+*		En niveau :				-21920.2
+regress		RPRICE NEARINC Y81 AGE* ECMT
+regress		RPRICEl NEARINC Y81 AGE* ECMT
+summarize	RPRICE if NEARINC==0&Y81==0
 
-regress		RPRICE NEARINC Y81 AGE AGE2 ECMT, robust // -21920.27
+*		Pas de correction : 	-13933.5
+display		r(mean)*(exp(_b[ECMT])-1)
 
-* Note sur le log:
-regress		RPRICEl NEARINC Y81 AGE AGE2 ECMT, robust
-summarize	RPRICE if NEARINC==1&YEAR==1978
-// -0.18495 * 63692.86 = -11780, qui est tres superieur a -21920.27,
-// autrement dit, le log conduirait a une surestimation de l'effet.
-// Prenons la correction de Kennedy :
-scalar		KENNEDY=exp(_b[ECMT]-0.5*_se[ECMT])-1
-display		KENNEDY*63692.86
-// Qui reste supérieur
+* 		Correction de Kennedy : -14092.8
+display		r(mean)*(exp(_b[ECMT]-0.5*_se[ECMT]^2)-1)
