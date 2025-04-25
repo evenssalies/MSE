@@ -30,7 +30,10 @@ generate	ECMT=Y81*NEARINC
 
 regress		RPRICE NEARINC Y81 ECMT // 70619.24-101307.51-(63692.86-82517.23)
 
-*	Attention au modèle log-linéaire si le vrai modèle est en niveau
+/*********************************************************
+* Modèle log-linéaire quand le vrai modèle est en niveau *
+**********************************************************/
+
 *		En niveau :				-21920.2
 regress		RPRICE NEARINC Y81 AGE* ECMT
 regress		RPRICEl NEARINC Y81 AGE* ECMT
@@ -42,8 +45,17 @@ display		r(mean)*(exp(_b[ECMT])-1)
 * 		Correction de Kennedy : -14092.8
 display		r(mean)*(exp(_b[ECMT]-0.5*_se[ECMT]^2)-1)
 
-/*	Effets individuels (faisons comme si on avait un panel) */
-/*		Création du panel avec indices individuels */
+/*************************
+* Estimateur avant-après *
+**************************/
+
+regress			RPRICE Y81 if NEARINC==1
+
+/**********************************************************
+* Effets individuels (faisons comme si on avait un panel) *
+***********************************************************/
+
+*	Création du panel avec indices individuels
 keep			NEARINC Y81 ECMT AGE RPRICE
 order			NEARINC Y81 ECMT
 
@@ -62,6 +74,6 @@ xtset			INDI Y81
 
 regress			RPRICE NEARINC Y81 ECMT	// -8146.96
 
-/* Estimation des effets groupe et individuels */
+*	Estimation des effets groupe et individuels
 xtreg			RPRICE NEARINC Y81 ECMT, fe
 regress			RPRICE Y81 ECMT i.INDI
