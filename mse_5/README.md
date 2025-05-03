@@ -1,1 +1,3 @@
 Lien vers l'article de [Krueger (1999)](http://piketty.pse.ens.fr/files/Krueger1999.pdf).
+
+Cette partie inclut une réflexion post-cours, suite a l'intervention d'Adam Sebti, sur l'estimateur stratifié obtenu en une seule regression de type panel avec effets fixes. Adam fut l'un de mes étudiants dans ce cours durant l'année académique 2020-2021. Adam a montré que l'on pouvait retrouver l'estimation stratifiée de l'ECMT en faisant une régression avec effets fixes et pondération. Sur les données de Krueger (1999), les variables indicatrices portent sur les écoles et les poids de ponderation sont la proportion de *regular classes*.
