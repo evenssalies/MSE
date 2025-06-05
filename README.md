@@ -1,6 +1,6 @@
 ## Méthodes statistiques d'évaluation
 
-<img src="http://www.evens-salies.com/pagedegarde.png" alt="Page de garde" width="200">
+<img src="http://www.frequency.fr/pagedegarde.png" alt="Page de garde" width="200">
 
 ### Note
 
