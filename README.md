@@ -10,6 +10,12 @@
 
 **Note importante :** le chapitre 9 est encore incomplet sur le biais de sélection à la Heckman pour les situations de troncature.
 
+### FAQ
+
+**Q : Comment appelle-t-on les disques colorés Stata, Python, R, etc. dans un dépôt GitHub ?**
+
+A : Ces indicateurs colorés sont appelés des **badges de langage** (language badges) ou **statistiques de langage du dépôt** (repository language statistics). GitHub les affiche automatiquement en fonction des fichiers de code présents dans le dépôt. Chaque couleur représente un langage de programmation différent, et la taille du disque ou de la barre indique la proportion de code écrit dans ce langage.
+
 ### Plan
 <sub>
 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Introduction : plan de cours<br/>
