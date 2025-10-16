@@ -10,6 +10,19 @@
 
 **Note importante :** le chapitre 9 est encore incomplet sur le biais de sélection à la Heckman pour les situations de troncature.
 
+### Nouveau : Support du package pins
+
+Ce dépôt inclut maintenant des exemples d'utilisation du package R `pins` pour versionner et partager des données de séries temporelles. Ceci est particulièrement utile pour la compatibilité avec le logiciel RATS (Regression Analysis of Time Series) et pour assurer la reproductibilité des analyses.
+
+- **Guide complet** : Voir [PINS_GUIDE.md](PINS_GUIDE.md) pour une documentation détaillée
+- **Exemple pratique** : Voir [mse_8/pins_timeseries_example.R](mse_8/pins_timeseries_example.R) pour un exemple d'utilisation avec les données de différence-de-différences
+
+Le package pins permet de :
+- Versionner automatiquement les jeux de données
+- Partager des données entre projets R et RATS
+- Documenter les sources et métadonnées
+- Assurer la reproductibilité des analyses
+
 ### Plan
 <sub>
 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Introduction : plan de cours<br/>
