@@ -1,1 +1,4 @@
-### Pas de programmes dans le chapitre d'introduction, aller à [mse_2](https://github.com/evenssalies/MSE/tree/main/mse_2) ⏭️
+#### Thanks to Diane Barat for the .R code version of ```simpsonparadox_exemple3.do``` (29/04/2021).
+
+#### Todolist
+Faire un .csv pour l'exemple 2.
