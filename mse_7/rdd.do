@@ -1,29 +1,30 @@
-* Khandker, S. R., Koolwal, G. B., & Hussain, A. S. (2010). 
-*	Handbook on Impact Evaluation: Quantitative Methods and Practices. 
-*	In The World Bank (Ed.), (pp. 262). 
+/*	Khandker, S. R., Koolwal, G. B., & Hussain, A. S. (2010). 
+	Handbook on Impact Evaluation: Quantitative Methods and Practices. 
+	In The World Bank (Ed.), (pp. 262). 
 
+	Data source: https://microdata.worldbank.org/index.php/catalog/436/get-microdata
 
-* Description:	hh_91.dta:		CS		of 826	households in 1991
-*				hh_98.dta:		CS		of 1129	households in 1998
-*				hh_9198.dta:	CSTS	of 826 	households in 1991 and 1998 	
+	 Description:
+	 			hh_91.dta:		CS		of 826	households in 1991
+				hh_98.dta:		CS		of 1129	households in 1998
+				hh_9198.dta:	CSTS	of 826 	households in 1991 and 1998 	
 
-
-* There are treated and control villages identified by two variables:
-*  dmmfd (male treated) and dfmfd (female treated). Unit of observation is
-*  the household. Other variables used in this program are:
-*	sexhead: genre du ou de la chef de famille
-* 	exptot: total expenditure en Tk/(capita.year)
-*	hhland: surface en decimals
-*	thanaid: `quartier'
+ There are treated and control villages identified by two variables:
+  dmmfd (male treated) and dfmfd (female treated). Unit of observation is
+  the household. Other variables used in this program are:
+	sexhead: genre du ou de la chef de famille
+ 	exptot: total expenditure en Tk/(capita.year)
+	hhland: surface en decimals
+	thanaid: `quartier' */
 clear all
 
-use				"http://www.evens-salies.com/hh_98.dta", clear
+use				"mse/datasets/hh_98.dta", clear
 
 summarize		sexhead
 *	Resultat : 90,8 % d'hommes, 9,2 % de femmes 
 by sexhead, sort: summarize		hhland
 *	Resultat : les femmes ont des surfaces plus grandes de 1,49 decimals, soit
-*		environ 60,3 m²
+*		environ 60,3 mÂ²
 
 * Variables creation and transformations
 *	On commence par s'interesser a la variable de placement du programme de

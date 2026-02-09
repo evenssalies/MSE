@@ -1,63 +1,61 @@
-*	Synthetic control method, Abadie et al. (2010)
-*	 Chargement de la routine et exemple du papier
-*
-*	Replication, Evens SALIES 10/2020, 03/2024, 11/2024
-*
-*	Installe la commande
-*	 ssc install 	synth, replace all
+/*	Synthetic control method, Abadie et al. (2010)
+	 Chargement de la routine et exemple du papier
+
+	Replication, Evens SALIES 10/2020, 03/2024, 11/2024
+
+	Installe la commande
+	 ssc install 	synth, replace all	*/
 
 clear			all
 macro			drop _all
 matrix			drop _all
-
-*do				"http://www.evens-salies.com/localhost.do"
-use				"http://www.evens-salies.com/sc_smoking.dta", clear
-tsset			state year 	// Les individus (state) doivent etre encodes
-
 set				more off
 
-/* Indices
-  state : 39 Etats ; Californie est encode 3, Alabama 1, Arkansas 2, ...
-	La base n'inclut pas les Etats écartés à l'appariement (Alaska, Arizona,
-	 Floride, Hawai, Oregon, Maryland, Massachussetts, Michigan, New Jersey, 
-	 New York, Washington), ainsi que le district de Columbia (qui n'est pas
-		un State :) 
-  year : 1970-2000
-   T_0 = 1989
-  Le panel est cylindre
- Variables
-  Y	
-   cigsale :	chiffre d'aff. des ventes de paquets/hab (env. 120$/hab.1an)
-  X
-   lnincome : 	log(Rev. menages/hab.1an)
-   retprice : 	prix de detail moyen en $/100 d'un paquet (taxes incluses)
-   age15to24 :	% des 15-24 ans
-   beer :		gallons/hab.1an de biere (1 g = 3,78 l) */
+cd 				"C:\Users\82128\Documents"
+use				"sc_smoking.dta", clear
 
-/* Le nom des unités plutôt que celui de la variable encodée (unitnames()) */
+describe
+sort		state year
+
+/*	Indices individuel et temporel
+		state : 39 Etats ; Californie est encode 3, Alabama 1, Arkansas 2, ...
+		La base n'inclut pas les 11 Etats écartés à l'appariement (Alaska, 
+		Arizona, Floride, Hawai, Oregon, Maryland, Massachussetts, Michigan, 
+		New Jersey, New York, Washington), ni D. Columbia (pas un Etat) 
+		year : 31 années ; 1970-2000
+	Nombre d'observations
+		N = 39*31 = 1209
+	Année d'intervention
+		T_0 = 1989
+	Variable de résultat Y
+		cigsale :	chiffre d'aff. des ventes de paquets/hab (env. 120$/hab.1an)
+	Variables de confusion/exogènes	X
+	  lnincome : 	log(Rev. menages/hab.1an)
+      retprice : 	prix de detail moyen en $/100 d'un paquet (taxes incluses)
+      age15to24 :	% des 15-24 ans
+      beer :		gallons/hab.1an de biere (1 g = 3,78 l) */
+
+/*	Trie les données et rapport sur la nature cylindrée du panel */
+tsset			state year
+
+/*	Récupère le nom des Etat */
 decode 			state, generate(state_name)
-replace 		state_name="Trump" if state_name=="Alabama"
 
-/* Vérifie l'encodage des pays
-	(panel équilibré, suffit de prendre une a.) */
+/*	Vérifie l'encodage des pays (Alabama = 1, ..., Wyoming = 39) */
 sort 			year state
 local			I=1
 while 			`I'<=39 {
- display		state[`I'] " " state_name[`I']
+ display %2.0f		state[`I'], state_name[`I']
  local ++I
 }
 
-sort		state year
+/*		DiD (panel) */
 
-/*
-***************
-* DiD (panel) *
-***************
-* Deux groupes, N>2 individus (N1=6), T>2 periodes
-*		D'apres la methode du controle synthetique, on connait les
-*		Etats qui matchent avant l'intervention : 3, 4, 5, 19, 21, 34. On fait comme si
-*		ils faisaient partie du groupe test (c'est faux, bien sûr car en Californie il y a
-*		eu la grosse intervention sur la taxe, pas dans les autres Etats).
+/*	Deux groupes, N1=6, N0=39-6=33), T>2 periodes
+		D'apres la methode du controle synthetique, on connait les Etats qui
+		matchent avant l'intervention : 3, 4, 5, 19, 21, 34. On fait comme si
+		ils étaient les individus tests (c'est faux, bien sûr car la Californie
+		est le seul Etat réellement exposé à la hausse de taxe, pas dans les */
 generate	DI=(state==3|state==4|state==5|state==19|state==21|state==34)
 generate	DT=(year>=1989)
 generate	DIDT=DI*DT
@@ -130,7 +128,7 @@ twoway 	tsline cigsale if state_name=="California", ///
  title("Trends in per-capita cig. sales: Calif. vs. the rest of the U.S.", ///
 		size(medsmall)) ///
 		saving(sc_smoking_figure2, replace)
-s
+
 * Figure 2 : controle synthetique
 sort			state year
 synth			cigsale ///
@@ -189,7 +187,7 @@ restore
 synth 	Y					//	Dependante 
 		Z 					//	Explicatives classiques (X de Xb)
 		Y(0),				//	Pre-traitement (Y avant la date d'interv.)
-			Rq : Z et Y(0) sont transformes : moyennes de t=1 Ã  T_0 par defaut
+			Rq : Z et Y(0) sont transformes : moyennes de t=1 à T_0 par defaut
 				 On peut aussi specifier les periodes : 
 					Z : moyenne de 1 a T_0 (defaut) ou de () dans xperiod()
 					Z(a1) : 		une annee (pas de moy.)

@@ -1,28 +1,35 @@
-* 1) Matching et regression
-* 2) Rubin
-* 3) Imbens with Lalonde's data
+/* 	MSE 7
+	
+	Ce code porte sur la technique de matching par regression.
+	
+	NÃ©cessite le package nnmatch net sj 4-3 st0072
+	
+	Trois sources de donnÃ©es :
+	
+		1) Rubin (1977)
+		
+		Version des donnÃ©es de Lalonde (1985) par :
+		2) Dehejia et Wahba (2002)
+		3) Imbens et Rubin (2015)
 
+			Evens SALIES, 2025 */
+			
 ******************************************************
 * Matching ou regression pour l'estimation de l'ECMT *
 ******************************************************
 
-import excel using	"http://www.evens-salies.com/cardkruegershort.xlsx", ///
-	clear firstrow
+import excel using	"cardkrueger1994_short.xlsx", clear firstrow
 rename				(unit d x1 x2 y)(INDI D CHAIN JOBINI JOBFIN)
 
-*
-* Estimation de E(Y(0)|1) par matching 
+/* Estimation de E(Y(0)|1) par matching (NN) */
 nnmatch				JOBFIN D CHAIN JOBINI, ///
-	tc(att) m(1) exact(CHAIN) keep(matchingsave, replace)
-*	Estimation au plus proche voisin de l'ECMT : 0,3
-*		Note : on rappelle que nnmatch c'est un TAR
+	tc(att) m(1) exact(CHAIN) keep(matchingsave, replace) 	// ECMT = 0,3
 
 * Regression dans la sous-population appariee (aller voir "matchingsave.dta")
 *	(suppose un ECMT constant)
 save				"temp.dta", replace
 keep if				D==1|(_n==7|_n==8|_n==11|_n==15)
-regress				JOBFIN D CHAIN JOBINI
-*	Estimation par les MCO : 0,75
+regress				JOBFIN D CHAIN JOBINI					// MCO = 0,75
 
 	* Detour par l'ECM
 	* 	La regression tend plutot a estimer l'effet causal moyen (ECM)
@@ -33,25 +40,25 @@ regress				JOBFIN D CHAIN JOBINI
 	nnmatch				JOBFIN D CHAIN JOBINI, ///
 		tc(ate) m(4) exact(CHAIN) keep(matchingsave, replace)
 
-* Estimation de E(Y(0)|1) par regression (Rubin, 1977 ; Dehejia et Wahba, 2002,
-*	p. 152, Proposition 1). Regression d'appariement, pas une regression
-*		d'estimation de l'effet de D !!!
-*
-*	E(Y|1,X) : coefficients des var. de la regression dans le groupe test  
+/* Estimation de E(Y(0)|1) par regression (Rubin, 1977 ; Dehejia et Wahba, 2002,
+	p. 152, Proposition 1). Regression d'appariement, pas une regression
+		d'estimation de l'effet de D !!! */
+
+/*	E(Y|1,X) : coefficients des var. de la regression dans le groupe test */
 regress				JOBFIN CHAIN JOBINI if D==1
-*	Ê(Y(1)|1,x)
+/*	ÃŠ(Y(1)|1,x) */
 predict				JOBFINHAT1 if D==1, xb
 
-*	E(Y|0,X) : coefficients des var. de la regression dans le groupe temoin 
+/*	E(Y|0,X) : coefficients des var. de la regression dans le groupe temoin */
 regress				JOBFIN CHAIN JOBINI if D==0
-*	E(Y(0)|0,X), CIA => E(Y(0)|1,X), Ê(Y(0)|1,x) pour x : D=1
+/*	E(Y(0)|0,X), CIA => E(Y(0)|1,X), ÃŠ(Y(0)|1,x) pour x : D=1 */
 predict				JOBFINHAT0 if D==1, xb
 
-*	EMTT = Ê(Y(1)|1) - Ê(Y(0)|1)
+/*	EMTT = ÃŠ(Y(1)|1) - ÃŠ(Y(0)|1) */
 generate			EMT=JOBFINHAT1-JOBFINHAT0
-sum					EMT, nod
-*		PRESQUE PAREIL !!!	
-*	t-Test (equal variances (same individuals INDI))
+sum					EMT, nod								// ~ 0,3	
+
+*	t-Test (equal variances (same individuals INDI)) pour plus de statistiques
 ttest				EMT=0
 
 ******************
@@ -63,7 +70,7 @@ ttest				EMT=0
 *	- \delta here is \tau in Rubin
 
 * Data
-use			"http://www.evens-salies.com/rubin1977.dta", clear
+use			"rubin1977.dta", clear
 describe	// 72 obs., 4 var.
 
 * Scatter (Reproduit la Fig. 2 de Rubin, 1977, p. 18)
@@ -74,7 +81,7 @@ describe	// 72 obs., 4 var.
 rename			INDI INDIV
 label define	GROUPL 0 "(Programme 2)" 1 "(Programme 1)"
 label values	GROUP GROUPL
-label variable	POSY "Note après"
+label variable	POSY "Note aprÃ¨s"
 label variable	PREX "Note avant"
 egen		NINDIV=count(INDIV), by(PREX POSY GROUP)	
 scatter 	POSY PREX, mlabel(NINDIV) mcolor(none) by(GROUP)		
@@ -124,8 +131,6 @@ drop		POSY_1 POSY_0 ATE PREX2
 ********************************************************
 * III. 		ATE in EX data
 cls
-cd				"C:\Users\evens\Documents\"
-cd				"Evens\RESEARCH\_LITERATURE\1986_Lalonde\"
 
 * File with N_1=185
 use				"nsw_dw.dta", clear
