@@ -20,7 +20,7 @@ drop if 		alpha2=="BE"|alpha2=="IE"|alpha2=="MT"|alpha2=="PL"| ///
 
 /*	Declare data as panel format and order the data by INDI */
 encode			alpha2, generate(COUN) 
-
+	
 /* Graphiques */
 replace			RDINV=log(1+RDINV)
 replace			BINDEX=1-BINDEX
@@ -41,8 +41,8 @@ forvalues		I=1(1)13 {
 
 /* Superpose les droites de régression */
 #delimit;
-graph twoway	(lfit Y X if COUN==3, color(gs0))
-				(lfit Y X if COUN==10, color(gs6))
+graph twoway	(scatter Y X if COUN==3, msymbol(oh) mlwidth(vthin) mcolor(gs0))(lfit Y X if COUN==3, color(gs0))
+				(scatter Y X if COUN==10, msymbol(oh) mlwidth(vthin) mcolor(gs6))(lfit Y X if COUN==10, color(gs6))
 				(lfit Y X if COUN==1, color(gs15))
 				(lfit Y X if COUN==4, color(gs15))
 				(lfit Y X if COUN==5, color(gs15))
@@ -53,7 +53,7 @@ graph twoway	(lfit Y X if COUN==3, color(gs0))
 				(lfit Y X if COUN==11, color(gs15))
 				(lfit Y X if COUN==12, color(gs15))
 				(lfit Y X if COUN==13, color(gs15))
-				(lfit Y X, color(gs10) lpattern(solid)),
+				(lfit Y X, color(gs10) lpattern(longdash) lwidth(vthin)),
 				legend(off)
 				/* Pas de bande grise , ni cadre autour du graphique */
 				graphregion(fcolor(white) lpattern(blank))
@@ -62,6 +62,7 @@ graph twoway	(lfit Y X if COUN==3, color(gs0))
 				ylabel(5.99 "0,4" 6.68 "0,8" 7.38 "1,6" 8.07 "3,2" 8.76 "6,4" 9.46 "12,8", nogrid labsize(small))
 				ymlabel(9.84 "18,8")
 				aspectratio(1)
+				xsize(5) ysize(5)
 				xtitle("Centimes de réduction sur 1 € de R&D investi") ytitle("Dépense de R&D (milliards d'euros)")
 				subtitle("Espagne (noir), Pays-Bas (gris foncé), autres pays (gris très clair)", size(small) position(6)) ;
 #delimit cr
