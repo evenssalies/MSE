@@ -6,7 +6,7 @@
 #
 # 		Evens SALIES, v1 14/11/2017, v3 04/2025 
 
-DATA <- read.table("http://www.evens-salies.com/KIELMC.raw", header=FALSE)	
+DATA <- read.table("KIELMC.raw", header=FALSE)	
 # Note: R assigne les noms V1, ...	(voir le fichier KIELMC.DES file)	
 
 # Keep the following variables
