@@ -19,66 +19,80 @@ drop	_all
 local	URL0="https://raw.githubusercontent.com/evenssalies/MSE/main/mse_2/"
 local	FILEIN="`URL0'"+"ticelec.dta"
 use		`FILEIN', clear
-s
-/* Rename, arrange raw data */
+
+/* Renomme, arrange les données du fichier plat */
 drop			surface accomodation billestiindiv income floors
 rename			(indiv distance)(INDIV DIST)
 
-/* Convert string variables to numeric; label "Oui"/"Non" */
-label define		LABEL 0 "Non" 1 "Oui"
+/* Crée les étiquettes utiles pour les indicatrices */
+label define	LABEL 0 "Non" 1 "Oui"
+label define	METERLABEL 0 "Roue" 1 "Numérique"
 
+/*	Le ménage a-t-il répondu au pré-questionnaire ? Si non, on ne sait pas s'il
+	a Internet, ni quel est son type de compteur */
 generate		PREQUEST=1 if prequest=="Oui"
 replace			PREQUEST=0 if prequest=="Non"
 drop			prequest
-label values		PREQUEST LABEL
+label values	PREQUEST LABEL
 
+/*	A-t-il répondu au questionnaire ? */
 generate		QUEST=1 if quest=="Oui"
 replace			QUEST=0 if quest=="Non"
 drop			quest
-label values		QUEST LABEL
+label values	QUEST LABEL
 
+/*	A-t-il Internet ? */
 generate		INTERNET=1 if internet=="Oui"
 replace			INTERNET=0 if internet=="Non"
 drop			internet
-label values		INTERNET LABEL
+label values	INTERNET LABEL
 
+/*	A-t-il un compteur à roue ou numérique ? */
 encode			meter, generate(TEMP1)
 replace			TEMP1=0 if TEMP1==2
 rename			TEMP1 METER
 drop			meter
-label define		METERLABEL 0 "Roue" 1 "Numérique"
-label values		METER METERLABEL
+label values	METER METERLABEL
 
-/* 	This automatically drops individuals who do not answer to METER and DIST */
+/* 	Virer les ménages qui n'ont pas répondu au pré-questionnaire */
 drop if			PREQUEST==0
 
-/* 	We add these two lines as some people who answered the pre-questionnaire 
-	left blank either METER or DIST or bothmight have */
-drop			if METER==.				
-drop			if DIST==.				
-drop			if QUEST==0
-drop			QUEST PREQUEST groupfinal INTERNET
+/*	Et ceux qui n'ont pas répondu au questionnaire */
+drop if			QUEST==0
 
-/* Set the size of the different groups */
+/* 	Parmi tous les ménages qui ont répondu au pré-questionnaire, certains n'ont
+	pas renseigné le type de compteur, ni la distance entre le compteur et la
+	box Internet */
+drop			if METER==.|DIST==.				
+
+drop			QUEST PREQUEST INTERNET
+
+/*	Fixe la taille des différents groupes 
+		On a besoin de la taille de l'échantillon -> NTOTA */
 summarize		INDIV
-scalar			NTOTA=r(N)			// Size of our sample -> NTOTA
-scalar			NGRP3=25			// Group 3's size
-scalar			NGRP2=25			// Group 2's size
-scalar			NGRP1=NTOTA-NGRP3-NGRP2		// Group 1's size
+scalar			NTOTA=r(N)
+scalar			NGRP3=25					// Groupe 3
+scalar			NGRP2=25					// Groupe 2
+scalar			NGRP1=NTOTA-NGRP3-NGRP2		// Groupe 1
 
-/* Random assignment */
-/* 	First random draw to avoid the time-of-subscription effect */
+/*	Association d'un nombre aléatoire à chaque ménage.
+ 	Très important pour casser l'effet d'auto-sélection et l'effet "date
+	d'entrée dans l'expérimentation" (les premiers entrés sont plus motivés)
+	Dans l'article, j'ai associé 1+int(NTOTA*runiform()) plutôt que runiform().
+	Cela crée inutilement des ex-aequo */ 
 set seed		21041971
-generate		RANDN=1+int(NTOTA*runiform())
+generate		RANDN=runiform()
+*generate		RANDN=1+int(NTOTA*runiform())
 sort			RANDN
 
-/* Individuals who have to be in the control group anyway */
+/*	Ces individus doivent aller dans le groupe de contrôle, pas le choix */
 generate		CONTROL=1 if METER==0|DIST>20
 
-/* Pool them as they appear in the data set (stable option) */
+/*	Empile-les en respectant l'ordre suivant lequel ils apparaissent dans la
+	feuill de données (option stable option) */
 sort			CONTROL, stable					
-generate		IGRP=_n				// Index from 1 to N
+generate		IGRP=_n						// Indice  de 1 à N
 generate		GRP=1 if IGRP<=NGRP1		// [1,NGRP1] 	<- 1
-replace			GRP=2 if IGRP>NGRP1		// [NGRP1+1,N]	<- 2
+replace			GRP=2 if IGRP>NGRP1			// [NGRP1+1,N]	<- 2
 replace			GRP=3 if IGRP>NTOTA-NGRP2	// [NGRP2+1,N]	<- 3
 drop			IGRP RANDN CONTROL
