@@ -7,7 +7,8 @@
 # library(vscDebugger)
 
 ### Données originelles
-elec <- read.csv2("http://www.evens-salies.com/electric.company.csv")
+setwd("C:/Users/82128/Documents/GitHub/MSE/mse_2/")
+elec <- read.csv2("electric.company.csv")
 View(elec)
 str(elec)
 

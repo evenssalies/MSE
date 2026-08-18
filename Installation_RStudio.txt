@@ -1,0 +1,18 @@
+1) Installer R pour windows (24 juin 2025 : 4.5.1)
+- url : https://cran.r-project.org/bin/windows/base/
+- cliquer "Download R-x.y.z for Windows (... 64 bit)", x.y.z dernière version
+- Lancer R-4.5.1-win
+- Installation : langue, conserver les options par défaut
+
+2) Installer RStudio Desktop (16/03/2026, 2026.01.1)
+- url : https://posit.co/download/rstudio-desktop/
+- installer avec toutes les options par défaut
+Note: on peut installer RStudio sans désinstaller au préalable la version précédente
+
+-------------------------
+3) Installer R Tools (la dernière version, toujours)
+- url : https://cran.r-project.org/bin/windows/Rtools/
+- installer avec toutes les options par défaut ; cliquer sur "Rtools45 installer"
+
+-------------------------
+Ouvrir RStudio
