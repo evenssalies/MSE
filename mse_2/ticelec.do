@@ -89,7 +89,7 @@ sort			RANDN
 generate		CONTROL=1 if METER==0|DIST>20
 
 /*	Empile-les en respectant l'ordre suivant lequel ils apparaissent dans la
-	feuill de données (option stable option) */
+	feuille de données (option stable option) */
 sort			CONTROL, stable					
 generate		IGRP=_n						// Indice  de 1 à N
 generate		GRP=1 if IGRP<=NGRP1		// [1,NGRP1] 	<- 1
