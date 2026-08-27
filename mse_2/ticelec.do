@@ -21,7 +21,8 @@ local	FILEIN="`URL0'"+"ticelec.dta"
 use		`FILEIN', clear
 
 /* Renomme, arrange les données du fichier plat */
-drop			surface accomodation billestiindiv income floors
+drop			internet floors accomodation surface ///
+				billestiindiv income groupfinal
 rename			(indiv distance)(INDIV DIST)
 
 /* Crée les étiquettes utiles pour les indicatrices */
@@ -41,12 +42,6 @@ replace			QUEST=0 if quest=="Non"
 drop			quest
 label values	QUEST LABEL
 
-/*	A-t-il Internet ? */
-generate		INTERNET=1 if internet=="Oui"
-replace			INTERNET=0 if internet=="Non"
-drop			internet
-label values	INTERNET LABEL
-
 /*	A-t-il un compteur à roue ou numérique ? */
 encode			meter, generate(TEMP1)
 replace			TEMP1=0 if TEMP1==2
@@ -54,18 +49,20 @@ rename			TEMP1 METER
 drop			meter
 label values	METER METERLABEL
 
-/* 	Virer les ménages qui n'ont pas répondu au pré-questionnaire */
+/* 	Virer les ménages qui n'ont pas répondu au pré-questionnaire. 
+		N = 165 -> N = 134 */
 drop if			PREQUEST==0
+drop			PREQUEST
 
-/*	Et ceux qui n'ont pas répondu au questionnaire */
+/*	Et ceux qui n'ont pas répondu au questionnaire
+		N = 134 -> N = 115 */
 drop if			QUEST==0
+drop			QUEST
 
 /* 	Parmi tous les ménages qui ont répondu au pré-questionnaire, certains n'ont
 	pas renseigné le type de compteur, ni la distance entre le compteur et la
 	box Internet */
 drop			if METER==.|DIST==.				
-
-drop			QUEST PREQUEST INTERNET
 
 /*	Fixe la taille des différents groupes 
 		On a besoin de la taille de l'échantillon -> NTOTA */
@@ -81,9 +78,9 @@ scalar			NGRP1=NTOTA-NGRP3-NGRP2		// Groupe 1
 	Dans l'article, j'ai associé 1+int(NTOTA*runiform()) plutôt que runiform().
 	Cela crée inutilement des ex-aequo */ 
 set seed		21041971
-generate		RANDN=runiform()
-*generate		RANDN=1+int(NTOTA*runiform())
-sort			RANDN
+*generate		RANDN=runiform()
+generate		RANDN=1+int(NTOTA*runiform())
+sort			RANDN, stable
 
 /*	Ces individus doivent aller dans le groupe de contrôle, pas le choix */
 generate		CONTROL=1 if METER==0|DIST>20
@@ -96,3 +93,5 @@ generate		GRP=1 if IGRP<=NGRP1		// [1,NGRP1] 	<- 1
 replace			GRP=2 if IGRP>NGRP1			// [NGRP1+1,N]	<- 2
 replace			GRP=3 if IGRP>NTOTA-NGRP2	// [NGRP2+1,N]	<- 3
 drop			IGRP RANDN CONTROL
+
+sort			INDIV
