@@ -76,22 +76,30 @@ scalar			NGRP1=NTOTA-NGRP3-NGRP2		// Groupe 1
  	Très important pour casser l'effet d'auto-sélection et l'effet "date
 	d'entrée dans l'expérimentation" (les premiers entrés sont plus motivés)
 	Dans l'article, j'ai associé 1+int(NTOTA*runiform()) plutôt que runiform().
-	Cela crée inutilement des ex-aequo */ 
+	Cela calcule le nouveau rang. Des ménages sont ex-aequo (même rang) */ 
 set seed		21041971
 *generate		RANDN=runiform()
 generate		RANDN=1+int(NTOTA*runiform())
+
+/*	L'option stable conserve le rang des ex aequo tels qu'ils étaient dans la
+	base avant de trier les valeurs */ 
 sort			RANDN, stable
 
 /*	Ces individus doivent aller dans le groupe de contrôle, pas le choix */
 generate		CONTROL=1 if METER==0|DIST>20
 
-/*	Empile-les en respectant l'ordre suivant lequel ils apparaissent dans la
-	feuille de données (option stable option) */
+/* 	Place d'abord les 54 ménages qui ne peuvent pas être équipés */
 sort			CONTROL, stable					
+
+/*	Vont dans le groupe 1 les ménages dont le numéro de ligne est <= 60 */
 generate		IGRP=_n						// Indice  de 1 à N
 generate		GRP=1 if IGRP<=NGRP1		// [1,NGRP1] 	<- 1
-replace			GRP=2 if IGRP>NGRP1			// [NGRP1+1,N]	<- 2
-replace			GRP=3 if IGRP>NTOTA-NGRP2	// [NGRP2+1,N]	<- 3
-drop			IGRP RANDN CONTROL
 
+/*	Tous les ménages suivants vont dans le groupe 2 */
+replace			GRP=2 if IGRP>NGRP1			// [NGRP1+1,N]	<- 2
+
+/*	Les 25 derniers vont en fait dans le grouep 3 */
+replace			GRP=3 if IGRP>NTOTA-NGRP2	// [NGRP2+1,N]	<- 3
+
+drop			IGRP RANDN CONTROL
 sort			INDIV
